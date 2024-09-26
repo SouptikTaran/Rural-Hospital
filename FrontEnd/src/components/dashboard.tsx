@@ -23,7 +23,7 @@ export function DashboardComponent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="h-full w-[100%] bg-gray-100 p-4">
       <header className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Rural Healthcare Dashboard</h1>
         <div className="flex items-center space-x-4">

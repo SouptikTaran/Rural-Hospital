@@ -4,6 +4,8 @@ import { PatientAuthComponent } from "./components/patient-auth";
 import { PatientProfileCreationComponent } from "./components/patient-profile-creation";
 import { tokenLoader, checkToken , restrict , logoutFunc } from "./utils/utils";
 import NotFound from "./components/NotFound";
+import path from "path";
+import { Home } from "./pages/Home";
 
 
 function App() {
@@ -11,8 +13,7 @@ function App() {
     {
       loader: tokenLoader,
       id: 'root',
-      children: [
-
+        children: [
         {
           path: "/dashboard",
           loader: checkToken,
@@ -33,6 +34,10 @@ function App() {
       path: "login",
       loader:restrict ,   
       element: <PatientAuthComponent />
+    },
+    {
+      path :"/",
+      element : <Home />
     },
     {
       path: "*",

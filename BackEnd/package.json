@@ -2,7 +2,7 @@
   "name": "BackEnd",
   "version": "1.0.0",
   "main": "index.js",
-  "type" :"commonjs",
+  "type": "commonjs",
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^5.20.0",
