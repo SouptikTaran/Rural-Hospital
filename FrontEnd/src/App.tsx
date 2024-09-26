@@ -4,7 +4,6 @@ import { PatientAuthComponent } from "./components/patient-auth";
 import { PatientProfileCreationComponent } from "./components/patient-profile-creation";
 import { tokenLoader, checkToken , restrict , logoutFunc } from "./utils/utils";
 import NotFound from "./components/NotFound";
-import path from "path";
 import { Home } from "./pages/Home";
 
 

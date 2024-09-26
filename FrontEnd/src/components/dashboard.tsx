@@ -11,10 +11,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useNavigate } from "react-router-dom"
 
 export function DashboardComponent() {
   const [symptoms, setSymptoms] = useState("")
   const [diagnosis, setDiagnosis] = useState("")
+
+  const navigate = useNavigate()
 
   const handleSymptomSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -22,9 +25,14 @@ export function DashboardComponent() {
     setDiagnosis("Based on your symptoms, you may have a common cold. Please consult a doctor for confirmation.")
   }
 
+  const handleChange = () =>{
+    navigate('/details')
+  }
+
   return (
-    <div className="h-full w-[100%] bg-gray-100 p-4">
-      <header className="mb-6 flex items-center justify-between">
+    <div className="min-h-screen bg-gray-100">
+      {/* Fixed Navbar */}
+      <header className="mb-6 flex items-center justify-between fixed top-0 left-0 w-full bg-white shadow z-50 p-4">
         <h1 className="text-2xl font-bold">Rural Healthcare Dashboard</h1>
         <div className="flex items-center space-x-4">
           <Button variant="outline" size="icon">
@@ -49,7 +57,9 @@ export function DashboardComponent() {
         </div>
       </header>
 
-      <main className="grid gap-6 md:grid-cols-3">
+      {/* Main Content */}
+      <main className="grid gap-6 md:grid-cols-3 pt-20 px-4">
+        {/* Symptom Input & Diagnosis */}
         <Card className="md:col-span-2">
           <CardHeader>
             <CardTitle>Symptom Input & Diagnosis</CardTitle>
@@ -77,6 +87,7 @@ export function DashboardComponent() {
           </CardContent>
         </Card>
 
+        {/* Nearest Hospitals */}
         <Card>
           <CardHeader>
             <CardTitle>Nearest Hospitals</CardTitle>
@@ -97,6 +108,7 @@ export function DashboardComponent() {
           </CardContent>
         </Card>
 
+        {/* Health Profile & History */}
         <Card>
           <CardHeader>
             <CardTitle>Health Profile & History</CardTitle>
@@ -107,12 +119,13 @@ export function DashboardComponent() {
               <li>Allergies: None</li>
               <li>Chronic conditions: None</li>
             </ul>
-            <Button className="mt-4" variant="outline">
+            <Button className="mt-4" variant="outline" onClick={handleChange}>
               Edit Profile
             </Button>
           </CardContent>
         </Card>
 
+        {/* Health Tips & Alerts */}
         <Card>
           <CardHeader>
             <CardTitle>Health Tips & Alerts</CardTitle>
@@ -125,6 +138,7 @@ export function DashboardComponent() {
           </CardContent>
         </Card>
 
+        {/* Emergency & Ambulance Services */}
         <Card className="md:col-span-2">
           <CardHeader>
             <CardTitle>Emergency & Ambulance Services</CardTitle>
@@ -139,6 +153,7 @@ export function DashboardComponent() {
           </CardContent>
         </Card>
 
+        {/* Upcoming Appointments */}
         <Card>
           <CardHeader>
             <CardTitle>Upcoming Appointments</CardTitle>
@@ -152,6 +167,7 @@ export function DashboardComponent() {
         </Card>
       </main>
 
+      {/* Footer */}
       <footer className="mt-8 text-center text-sm text-gray-500">
         <Button variant="link" size="sm">
           <Settings className="mr-2 h-4 w-4" /> Accessibility Settings
