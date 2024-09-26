@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import './App.css'
-import PatientAuth from "./pages/PatientAuth";
-import Dashboard from "./pages/PatientDashboard";
+import { DashboardComponent } from "./components/dashboard";
+import { PatientAuthComponent } from "./components/patient-auth";
+import { PatientProfileCreationComponent } from "./components/patient-profile-creation";
 
 function App() {
 
@@ -11,8 +11,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" >
-            <Route index element={<PatientAuth />} />
-            <Route  path="dash" element={<Dashboard />} />
+            <Route index element={<PatientAuthComponent />} />
+            <Route  path="/dashboard" element={<DashboardComponent />} />
+            <Route path="/profile-create" element={<PatientProfileCreationComponent />} />
 
           </Route>
         </Routes>

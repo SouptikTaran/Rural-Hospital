@@ -10,8 +10,11 @@ const helmet = require('helmet');
 const routes = require("./routes/index.routes")
 const PORT = process.env?.PORT || 8000
 
-app.use(cors());
-app.use(helmet());
+app.use(cors({
+    origin: 'http://localhost:5173', // Allow requests from frontend origin
+    credentials: true // Enable credentials (cookies)
+  }));
+  app.use(helmet());
 app.use(express.json())
 
 app.use('/' , routes)

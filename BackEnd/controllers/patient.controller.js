@@ -13,25 +13,28 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 // Signup Controller
 const signup = async (req, res) => {
     const { firstName, lastName, email, gender, password } = req.body;
+    // console.log(req.body)
+    // Validate the request data
     const validation = signupSchema.safeParse(req.body);
-    if (!validation.success)
-        return res
-            .status(400)
-            .json({ message: 'Invalid Data Input', error: validation.error.errors });
+    if (!validation.success) {
+        // console.error("Validation Error:", validation.error.errors); 
+        return res.status(400).json({
+            error: 'Invalid Data Input',
+            errors: validation.error.errors,
+        });
+    }
 
     try {
         // Check if the patient already exists
-        const existingPatient = await prisma.patient.findUnique({
-            where: { email },
-        });
+        const existingPatient = await prisma.patient.findUnique({ where: { email } });
         if (existingPatient) {
-            return res.status(400).json({ message: 'Patient already exists' });
+            return res.status(400).json({ error: 'Patient already exists' });
         }
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create a new patient
+        // Create a new patient in the database
         const patient = await prisma.patient.create({
             data: {
                 firstName,
@@ -42,68 +45,86 @@ const signup = async (req, res) => {
             },
         });
 
-        // Assuming sendMailQueue is defined elsewhere
-        // sendMailQueue(email, firstName + lastName);
+        // Generate a JWT token for the newly created patient
+        const token = jwt.sign(
+            { email: patient.email },
+            JWT_SECRET,
+            { expiresIn: '1h' }
+        );
 
-        res.status(201).json({ message: 'Patient created successfully', patient });
+        res.status(201).json({
+            message: 'Patient created successfully',
+            patient,
+            token,
+        });
     } catch (error) {
-        res
-            .status(500)
-            .json({ message: 'Error creating patient', error: error.message });
+        console.error("Error Creating Patient:", error.message);
+        res.status(500).json({
+            error: 'Error creating patient',
+            message: error.message,
+        });
     }
 };
 
 // Login Controller
 const login = async (req, res) => {
     const { email, password } = req.body;
+
+    // Validate the login data
     const validation = loginSchema.safeParse(req.body);
-    if (!validation.success)
-        return res
-            .status(400)
-            .json({ message: 'Invalid Data Input', error: validation.error.errors });
+    if (!validation.success) {
+        console.error("Validation Error:", validation.error.errors);
+        return res.status(400).json({
+            error: 'Invalid Data Input',
+            errors: validation.error.errors,
+        });
+    }
 
     try {
-        // Find the patient by email
+        // Check if the patient exists
         const patient = await prisma.patient.findUnique({ where: { email } });
         if (!patient) {
-            return res.status(400).json({ message: 'Invalid email or password' });
+            return res.status(400).json({ error: 'Invalid email or password' });
         }
 
-        // Check the password
+        // Verify the password
         const isPasswordValid = await bcrypt.compare(password, patient.password);
         if (!isPasswordValid) {
-            return res.status(400).json({ message: 'Invalid email or password' });
+            return res.status(400).json({ error: 'Invalid email or password' });
         }
 
-        // Generate a JWT token
+        // Generate JWT token
         const token = jwt.sign(
             { id: patient.id, email: patient.email },
             JWT_SECRET,
-            {
-                expiresIn: '1h',
-            }
+            { expiresIn: '1h' }
         );
 
         res.status(200).json({ message: 'Login successful', token });
     } catch (error) {
-        res.status(500).json({ message: 'Error logging in', error: error.message });
+        console.error("Login Error:", error.message);
+        res.status(500).json({
+            error: 'Error logging in',
+            message: error.message,
+        });
     }
 };
 
 // Delete Patient Controller
 const deletePatient = async (req, res) => {
     const { id } = req.params;
+
+    // Validate the ID
     const validation = deletePatientSchema.safeParse(req.params);
-    if (!validation.success)
-        return res.status(400).json({ message: 'Invalid Data Input' });
+    if (!validation.success) {
+        return res.status(400).json({ error: 'Invalid Data Input' });
+    }
 
     try {
         // Check if the patient exists
-        const patient = await prisma.patient.findUnique({
-            where: { id: parseInt(id) },
-        });
+        const patient = await prisma.patient.findUnique({ where: { id: parseInt(id) } });
         if (!patient) {
-            return res.status(404).json({ message: 'Patient not found' });
+            return res.status(404).json({ error: 'Patient not found' });
         }
 
         // Delete the patient
@@ -111,48 +132,50 @@ const deletePatient = async (req, res) => {
 
         res.status(200).json({ message: 'Patient deleted successfully', patient });
     } catch (error) {
-        res
-            .status(500)
-            .json({ message: 'Error deleting patient', error: error.message });
+        console.error("Delete Error:", error.message);
+        res.status(500).json({
+            error: 'Error deleting patient',
+            message: error.message,
+        });
     }
 };
 
-
-// Profile Creation
+// Update Patient Profile Controller
 const patientDetails = async (req, res) => {
-    const { address, age, phoneNumber, email } = req.body; // Ensure to receive email for patient identification
+    const { address, age, phoneNumber, email } = req.body;
+    console.log(req.body)
 
     try {
         // Find the patient by email
-        const patient = await prisma.patient.findUnique({
-            where: { email },
-        });
+        const patient = await prisma.patient.findUnique({ where: { email } });
 
-        // If patient does not exist, respond with a 404 error
         if (!patient) {
-            return res.status(404).json({ message: 'Patient not found' });
+            return res.status(404).json({ error: 'Patient not found' });
         }
 
-        // Update patient details
+        // Update the patient details
         const updatedPatient = await prisma.patient.update({
             where: { email },
-            data: {
-                address,
-                age,
-                phoneNumber,
-            },
+            data: { address, age, phoneNumber },
         });
 
-        res.status(200).json({ message: 'Patient details updated successfully', patient: updatedPatient });
+        res.status(200).json({
+            message: 'Patient details updated successfully',
+            patient: updatedPatient,
+        });
     } catch (error) {
-        res.status(500).json({ message: 'Error updating patient details', error: error.message });
+        console.error("Update Error:", error.message);
+        res.status(500).json({
+            error: 'Error updating patient details',
+            message: error.message,
+        });
     }
 };
 
-// Export the controllers
+// Exporting the controllers
 module.exports = {
     signup,
     login,
     deletePatient,
-    patientDetails
+    patientDetails,
 };

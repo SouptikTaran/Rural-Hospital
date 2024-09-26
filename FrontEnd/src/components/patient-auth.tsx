@@ -6,6 +6,47 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import toast from "react-hot-toast";
+import Cookies from 'js-cookie';
+
+import axios from 'axios';
+import { useNavigate } from "react-router-dom"
+axios.defaults.withCredentials = true;
+
+
+const errorNoti = (msg) => {
+  toast.error(msg, {
+    style: {
+      border: '1px solid #FF0000',
+      padding: '16px',
+      color: '#FFFFFF',
+      backgroundColor: '#FF0000',
+      fontWeight: 'bold',
+    },
+    iconTheme: {
+      primary: '#FFFFFF',
+      secondary: '#FF0000',
+    },
+  });
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const successNoti = (msg: any) => {
+  toast.success(msg, {
+    style: {
+      border: '1px solid #00FF00',
+      padding: '16px',
+      color: '#FFFFFF',
+      backgroundColor: '#00FF00',
+      fontWeight: 'bold',
+    },
+    iconTheme: {
+      primary: '#FFFFFF',
+      secondary: '#00FF00',
+    },
+  });
+}
+
 
 export function PatientAuthComponent() {
   const [showPassword, setShowPassword] = useState(false)
@@ -17,23 +58,79 @@ export function PatientAuthComponent() {
   const [signupGender, setSignupGender] = useState("")
   const [signupPassword, setSignupPassword] = useState("")
 
-  const handleLogin = (e: React.FormEvent) => {
+  const navigate = useNavigate()
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     // TODO: Implement login logic
-    console.log("Login:", { email: loginEmail, password: loginPassword })
+    // console.log("Login:", { email: loginEmail, password: loginPassword })
+
+    try {
+      const response = await axios.post("http://localhost:8000/login", {
+        email: loginEmail,
+        password: loginPassword,
+      })
+
+      console.log(response)
+
+      if (response.status === 200) {
+        const token = response.data.token;
+        if (token) {
+          Cookies.set("token", token, {
+            expires: 7,
+            secure: true,
+            sameSite: "None",
+          });
+          successNoti(response.data.message);
+          navigate("/dashboard");
+        }
+      } else {
+        errorNoti("Error occurred during signup");
+      }
+
+
+    } catch (error) {
+      if (error.response && error.response.data) {
+        errorNoti(error.response.data.error || "Error occurred during Login");
+      } else {
+        errorNoti("Error occurred during signup");
+      }
+    }
   }
 
-  const handleSignup = (e: React.FormEvent) => {
-    e.preventDefault()
-    // TODO: Implement signup logic
-    console.log("Signup:", {
-      firstName: signupFirstName,
-      lastName: signupLastName,
-      email: signupEmail,
-      gender: signupGender,
-      password: signupPassword
-    })
-  }
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:8000/signup", {
+        firstName: signupFirstName,
+        lastName: signupLastName,
+        email: signupEmail,
+        gender: signupGender,
+        password: signupPassword,
+      });
+      if (response.status == 201) {
+        const token = response.data.token;
+        if (token) {
+          Cookies.set("token", token, {
+            expires: 7,
+            secure: true,
+            sameSite: "None",
+          });
+          successNoti("Successfully signed up");
+          navigate("/profile-create");
+        }
+      }
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        errorNoti(error.response.data.error || "Error occurred during signup");
+      } else {
+        errorNoti("Error occurred during signup");
+      }
+    }
+  };
+
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -143,16 +240,16 @@ export function PatientAuthComponent() {
                   <Label>Gender</Label>
                   <RadioGroup value={signupGender} onValueChange={setSignupGender} className="flex space-x-4">
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="male" id="male" />
-                      <Label htmlFor="male">Male</Label>
+                      <RadioGroupItem value="Male" id="Male" />
+                      <Label htmlFor="Male">Male</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="female" id="female" />
-                      <Label htmlFor="female">Female</Label>
+                      <RadioGroupItem value="Female" id="Female" />
+                      <Label htmlFor="Female">Female</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="other" id="other" />
-                      <Label htmlFor="other">Other</Label>
+                      <RadioGroupItem value="Other" id="Other" />
+                      <Label htmlFor="Other">Other</Label>
                     </div>
                   </RadioGroup>
                 </div>
