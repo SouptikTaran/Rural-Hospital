@@ -117,9 +117,10 @@ export function PatientAuthComponent() {
             sameSite: "None",
           });
           successNoti("Successfully signed up");
-          navigate("/profile-create");
+          navigate("/details");
         }
       }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.response && error.response.data) {
         errorNoti(error.response.data.error || "Error occurred during signup");

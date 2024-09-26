@@ -1,25 +1,54 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserRouter , RouterProvider} from "react-router-dom";
 import { DashboardComponent } from "./components/dashboard";
 import { PatientAuthComponent } from "./components/patient-auth";
 import { PatientProfileCreationComponent } from "./components/patient-profile-creation";
+import { tokenLoader, checkToken , restrict , logoutFunc } from "./utils/utils";
+import NotFound from "./components/NotFound";
+
 
 function App() {
+  const routerConfig = [
+    {
+      loader: tokenLoader,
+      id: 'root',
+      children: [
 
+        {
+          path: "/dashboard",
+          loader: checkToken,
+          element: <DashboardComponent />
+        },
+        {
+          path:"/Details",
+          loader : checkToken,
+          element : <PatientProfileCreationComponent />
+        },
+        {
+          path :"logout",
+          loader : logoutFunc 
+        }
+      ]
+    },
+    {
+      path: "login",
+      loader:restrict ,   
+      element: <PatientAuthComponent />
+    },
+    {
+      path: "*",
+      element: <NotFound />
+    }
+  ];
+
+  const router = createBrowserRouter(routerConfig);
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" >
-            <Route index element={<PatientAuthComponent />} />
-            <Route  path="/dashboard" element={<DashboardComponent />} />
-            <Route path="/profile-create" element={<PatientProfileCreationComponent />} />
+    
+    <RouterProvider router={router} />
 
-          </Route>
-        </Routes>
-      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

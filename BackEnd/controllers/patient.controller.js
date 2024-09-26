@@ -143,7 +143,6 @@ const deletePatient = async (req, res) => {
 // Update Patient Profile Controller
 const patientDetails = async (req, res) => {
     const { address, age, phoneNumber, email } = req.body;
-    console.log(req.body)
 
     try {
         // Find the patient by email
