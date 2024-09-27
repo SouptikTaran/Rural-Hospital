@@ -137,19 +137,19 @@ export function PatientAuthComponent() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Rural Healthcare System</CardTitle>
-          <CardDescription className="text-center">Login or create an account to access healthcare services</CardDescription>
+          <CardTitle className="text-2xl font-bold text-center text-[#44457d]">Rural Healthcare System</CardTitle>
+          <CardDescription className="text-center text-[#44457d]">Login or create an account to access healthcare services</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="login" className="data-[state=active]:bg-[#5046e3] data-[state=active]:text-white">Login</TabsTrigger>
+              <TabsTrigger value="signup" className="data-[state=active]:bg-[#5046e3] data-[state=active]:text-white">Sign Up</TabsTrigger>
             </TabsList>
             <TabsContent value="login">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
+                  <Label htmlFor="login-email" className="text-[#44457d]">Email</Label>
                   <div className="relative">
                     <Input
                       id="login-email"
@@ -160,11 +160,11 @@ export function PatientAuthComponent() {
                       required
                       className="pl-10"
                     />
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2  text-[#7750ed]" size={18} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="login-password">Password</Label>
+                  <Label htmlFor="login-password" className="text-[#44457d]">Password</Label>
                   <div className="relative">
                     <Input
                       id="login-password"
@@ -175,7 +175,7 @@ export function PatientAuthComponent() {
                       required
                       className="pl-10 pr-10"
                     />
-                    <LockKeyhole className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                    <LockKeyhole className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7750ed]" size={18} />
                     <Button
                       type="button"
                       variant="ghost"
@@ -183,17 +183,17 @@ export function PatientAuthComponent() {
                       className="absolute right-1 top-1/2 transform -translate-y-1/2"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      {showPassword ? <EyeOff size={18} className="text-[#7750ed]"/> : <Eye size={18} className="text-[#7750ed]"/>}
                     </Button>
                   </div>
                 </div>
-                <Button type="submit" className="w-full">Login</Button>
+                <Button type="submit" className="w-full bg-[#5046e3]">Login</Button>
               </form>
             </TabsContent>
             <TabsContent value="signup">
               <form onSubmit={handleSignup} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-first-name">First Name</Label>
+                  <Label htmlFor="signup-first-name" className="text-[#44457d]">First Name</Label>
                   <div className="relative">
                     <Input
                       id="signup-first-name"
@@ -204,11 +204,11 @@ export function PatientAuthComponent() {
                       required
                       className="pl-10"
                     />
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7750ed]" size={18} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-last-name">Last Name</Label>
+                  <Label htmlFor="signup-last-name" className="text-[#44457d]">Last Name</Label>
                   <div className="relative">
                     <Input
                       id="signup-last-name"
@@ -219,11 +219,11 @@ export function PatientAuthComponent() {
                       required
                       className="pl-10"
                     />
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7750ed]" size={18} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="signup-email" className="text-[#44457d]">Email</Label>
                   <div className="relative">
                     <Input
                       id="signup-email"
@@ -234,23 +234,23 @@ export function PatientAuthComponent() {
                       required
                       className="pl-10"
                     />
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7750ed]" size={18} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Gender</Label>
+                  <Label className="text-[#44457d]">Gender</Label>
                   <RadioGroup value={signupGender} onValueChange={setSignupGender} className="flex space-x-4">
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Male" id="Male" />
-                      <Label htmlFor="Male">Male</Label>
+                      <RadioGroupItem value="Male" id="Male" className="text-[#44457d] ring-[0.03rem] outline-none appearance-none ring-[#7750ed] "/>
+                      <Label htmlFor="Male" className="text-[#44457d] ">Male</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Female" id="Female" />
-                      <Label htmlFor="Female">Female</Label>
+                      <RadioGroupItem value="Female" id="Female" className="text-[#44457d] ring-[0.03rem] outline-none appearance-none ring-[#7750ed] "/>
+                      <Label htmlFor="Female" className="text-[#44457d] ">Female</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Other" id="Other" />
-                      <Label htmlFor="Other">Other</Label>
+                      <RadioGroupItem value="Other" id="Other" className="text-[#44457d] ring-[0.03rem] outline-none appearance-none ring-[#7750ed] " />
+                      <Label htmlFor="Other" className="text-[#44457d]">Other</Label>
                     </div>
                   </RadioGroup>
                 </div>
@@ -266,7 +266,7 @@ export function PatientAuthComponent() {
                       required
                       className="pl-10 pr-10"
                     />
-                    <LockKeyhole className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                    <LockKeyhole className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7750ed]" size={18} />
                     <Button
                       type="button"
                       variant="ghost"
@@ -274,17 +274,17 @@ export function PatientAuthComponent() {
                       className="absolute right-1 top-1/2 transform -translate-y-1/2"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      {showPassword ? <EyeOff size={18} className="text-[#7750ed]"/> : <Eye size={18} className="text-[#7750ed]"/>}
                     </Button>
                   </div>
                 </div>
-                <Button type="submit" className="w-full">Sign Up</Button>
+                <Button type="submit" className="w-full bg-[#5046e3]">Sign Up</Button>
               </form>
             </TabsContent>
           </Tabs>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-[#6e6da9]">
             By logging in or signing up, you agree to our{" "}
             <a href="#" className="text-blue-600 hover:underline">
               Terms of Service

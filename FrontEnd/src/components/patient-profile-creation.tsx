@@ -91,8 +91,8 @@ export function PatientProfileCreationComponent() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Create Your Patient Profile</CardTitle>
-          <CardDescription className="text-center">Please provide your personal information to complete your profile</CardDescription>
+          <CardTitle className="text-2xl font-bold text-center text-[#7750ed]">Create Your Patient Profile</CardTitle>
+          <CardDescription className="text-center text-[#6e6da9]">Please provide your personal information to complete your profile</CardDescription>
         </CardHeader>
         <CardContent>
           {notification.message && (
@@ -102,7 +102,7 @@ export function PatientProfileCreationComponent() {
           )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="address">Address</Label>
+              <Label htmlFor="address " className="text-[#6e6da9]">Address</Label>
               <div className="relative">
                 <Textarea
                   id="address"
@@ -112,11 +112,11 @@ export function PatientProfileCreationComponent() {
                   required
                   className="pl-10 min-h-[100px]"
                 />
-                <Home className="absolute left-3 top-3 text-gray-400" size={18} />
+                <Home className="absolute left-3 top-2 text-[#7750ed]" size={18} />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="age">Age</Label>
+              <Label htmlFor="age" className="text-[#6e6da9]">Age</Label>
               <div className="relative">
                 <Input
                   id="age"
@@ -127,13 +127,13 @@ export function PatientProfileCreationComponent() {
                   required
                   min="0"
                   max="120"
-                  className="pl-10"
+                  className="pl-10 "
                 />
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7750ed]" size={18} />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Phone Number</Label>
+              <Label htmlFor="phoneNumber" className="text-[#6e6da9]">Phone Number</Label>
               <div className="relative">
                 <Input
                   id="phoneNumber"
@@ -144,11 +144,11 @@ export function PatientProfileCreationComponent() {
                   required
                   className="pl-10"
                 />
-                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7750ed]" size={18} />
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-[#6e6da9]">Email</Label>
               <div className="relative">
                 <Input
                   id="email"
@@ -159,20 +159,20 @@ export function PatientProfileCreationComponent() {
                   required
                   className="pl-10"
                 />
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7750ed]" size={18} />
               </div>
             </div>
-            <Button type="submit" className="w-full">Create Profile</Button>
+            <Button type="submit" className="w-full bg-[#5046e3]">Create Profile</Button>
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-[#6e6da9]">
             By creating a profile, you agree to our{" "}
             <a href="#" className="text-blue-600 hover:underline">
               Terms of Service
             </a>{" "}
             and{" "}
-            <a href="#" className="text-blue-600 hover:underline">
+            <a href="#" className="text-blue-600 hover:underline text-[#6e6da9]">
               Privacy Policy
             </a>
             .
