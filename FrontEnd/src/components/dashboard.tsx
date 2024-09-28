@@ -1,6 +1,7 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import { LogOutButton } from "./logout"
-import { Bell, ChevronDown, LogOut, Mic, Phone, Settings } from "lucide-react"
+import { Bell, ChevronDown, Mic, Phone, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,20 +14,29 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useNavigate } from "react-router-dom"
+import axios from "axios"
 
 export function DashboardComponent() {
   const [symptoms, setSymptoms] = useState("")
-  const [diagnosis, setDiagnosis] = useState("")
+  // const [diagnosis, setDiagnosis] = useState("")
+  const [result, setResult] = useState([]);
 
   const navigate = useNavigate()
+  const handleSymptomSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:8000/predict", {
+        symptoms
+      });
+      const data = response.data;
+      console.log(data)
+      setResult(data)
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const handleSymptomSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Simulate AI diagnosis (replace with actual AI integration)
-    setDiagnosis("Based on your symptoms, you may have a common cold. Please consult a doctor for confirmation.")
-  }
-
-  const handleChange = () =>{
+  const handleChange = () => {
     navigate('/details')
   }
 
@@ -55,7 +65,7 @@ export function DashboardComponent() {
             <AvatarImage src="/placeholder-avatar.jpg" alt="User" />
             <AvatarFallback className="text-[#44457d]">U</AvatarFallback>
           </Avatar>
-          <LogOutButton/>
+          <LogOutButton />
 
         </div>
 
@@ -84,12 +94,32 @@ export function DashboardComponent() {
               </div>
               <Button className="bg-[#5046e3]" type="submit">Analyze Symptoms</Button>
             </form>
-            {diagnosis && (
+            {/* {diagnosis && (
               <div className="mt-4 rounded-lg bg-blue-100 p-4 text-blue-800">
                 <h3 className="font-semibold">AI Diagnosis:</h3>
                 <p>{diagnosis}</p>
               </div>
+            )} */}
+            {result && (
+              result.map((data) => (
+                <div key={data.id} className="flex justify-between items-start p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mb-4">
+                  <div className="flex-1">
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{data.disease}</h5>
+                    <p className="font-normal text-gray-700"><span className="font-medium">Cure</span>: {data.cure}</p>
+                    <p className="font-normal text-gray-700"><span className="font-medium">Doctor</span>: {data.doctor}</p>
+                    <p className="font-normal text-gray-700"><span className="font-medium">Probability</span>: {parseFloat(data.probability) * 100} %</p>
+                    <p className="font-normal text-gray-700"><span className="font-medium">Risk Level</span>: {data.risk_level}</p>
+                  </div>
+                  <div className="flex items-center ml-4 justify-center align-middle">
+                    <button className="bg-[#7750ed] text-white px-4 py-2 rounded">
+
+                      <Link to={'/Booking'}>Book Appointment</Link>
+                    </button>
+                  </div>
+                </div>
+              ))
             )}
+
           </CardContent>
         </Card>
 

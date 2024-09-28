@@ -18,8 +18,8 @@ export const Home = () => {
                     <div className="header-right">
                         <nav>
                             <ul>
-                                <li>
-                                    <a style={{ fontSize: '22px' }} href="/login">Login</a>
+                                <li className='bg-[#7750ed] text-white w-20 text-center rounded-md'>
+                                    <a className='text-white' style={{ fontSize: '22px' }} href="/login">Login</a>
                                 </li>
                             </ul>
                         </nav>

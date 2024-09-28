@@ -24,6 +24,7 @@ header {
 .header-left {
     flex-basis: 45%;
     display: flex;
+    color : white;
     align-items: center;
     gap: 15px;
     font-size: 20px;
@@ -42,8 +43,7 @@ header {
 
 .header-right nav ul li a {
     font-size: 18px;
-    font-weight: bold;
-    color: #44457d;
+    color: white;
 }
 
 .intro {
