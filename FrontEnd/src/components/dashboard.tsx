@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
+import MapComponent from "./map"
 
 export function DashboardComponent() {
   const [symptoms, setSymptoms] = useState("")
@@ -187,7 +188,7 @@ export function DashboardComponent() {
           <CardHeader>
             <CardTitle className="text-[#44457d] ">Nearest Hospitals</CardTitle>
           </CardHeader>
-          <CardContent>
+          {/* <CardContent>
             <ul className="flex flex-col gap-[20px] ">
               {["City Hospital", "Rural Health Center", "Community Clinic"].map((hospital) => (
                 <li key={hospital} className="rounded-lg border p-4">
@@ -200,7 +201,10 @@ export function DashboardComponent() {
                 </li>
               ))}
             </ul>
-          </CardContent>
+          </CardContent> */}
+          <div className="p-4">
+              <MapComponent/>
+          </div>
         </Card>
 
         {/* Health Profile & History */}
