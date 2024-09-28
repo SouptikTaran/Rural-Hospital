@@ -1,11 +1,12 @@
-import { useState } from "react"
-import { Link } from "react-router-dom"
+import { useState, useEffect } from "react"
+// import { Link } from "react-router-dom"
 import { LogOutButton } from "./logout"
 import { Bell, ChevronDown, Mic, Phone, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { toast } from 'react-toastify';
 import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
@@ -15,26 +16,81 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
+import { useLocation } from "@/Contexts/LocationContext"
 
+interface Data {
+  id: string; // Unique identifier for the data
+  disease: string; // Name of the disease
+  cure: string; // Suggested cure
+  doctor: string; // Name of the doctor
+  probability: string; // Probability of the disease (string to match your existing code)
+  risk_level: string; // Risk level (e.g., Low, Medium, High)
+}
 export function DashboardComponent() {
   const [symptoms, setSymptoms] = useState("")
-  // const [diagnosis, setDiagnosis] = useState("")
   const [result, setResult] = useState([]);
+  const { location, setLocation } = useLocation(); // Use context to get location and setLocation
+
+  useEffect(() => {
+    const fetchLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setLocation({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          },
+          (error) => {
+            console.error("Error fetching location:", error.message);
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    };
+
+    fetchLocation();
+  }, [setLocation]);
+
 
   const navigate = useNavigate()
   const handleSymptomSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/predict", {
-        symptoms
-      });
-      const data = response.data;
-      console.log(data)
-      setResult(data)
+      const response = await toast.promise(
+        axios.post("http://localhost:8000/predict", {
+          symptoms,
+          location // Include location if needed
+        }),
+        {
+          pending: 'Analyzing symptoms...',
+          success: {
+            render({ data }) {
+              // Ensure data is accessible
+              return 'Analysis successful! 🎉';
+            }
+          },
+          error: {
+            render({ data }) {
+              console.error(data); // Log the error data for debugging
+              return 'Analysis failed. 🤯';
+            }
+          }
+        }
+      );
+      setResult(response.data)
+      console.log(response.data);
+      console.log(location);
     } catch (error) {
-      console.log(error);
+      console.error("Request failed:", error);
     }
   };
+
+  const handleBookAppointment = (data: Data) => {
+    navigate('/booking', { state: { selectedData: data } });  // Pass data using state
+  };
+
 
   const handleChange = () => {
     navigate('/details')
@@ -100,25 +156,18 @@ export function DashboardComponent() {
                 <p>{diagnosis}</p>
               </div>
             )} */}
-            {result && (
-              result.map((data) => (
-                <div key={data.id} className="flex justify-between items-start p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mb-4">
-                  <div className="flex-1">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{data.disease}</h5>
-                    <p className="font-normal text-gray-700"><span className="font-medium">Cure</span>: {data.cure}</p>
-                    <p className="font-normal text-gray-700"><span className="font-medium">Doctor</span>: {data.doctor}</p>
-                    <p className="font-normal text-gray-700"><span className="font-medium">Probability</span>: {parseFloat(data.probability) * 100} %</p>
-                    <p className="font-normal text-gray-700"><span className="font-medium">Risk Level</span>: {data.risk_level}</p>
-                  </div>
-                  <div className="flex items-center ml-4 justify-center align-middle">
-                    <button className="bg-[#7750ed] text-white px-4 py-2 rounded">
-
-                      <Link to={'/Booking'}>Book Appointment</Link>
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
+            {result && result.map((data: Data) => (
+              <div key={data.id} className="p-6 bg-white border rounded-lg shadow mb-4">
+                <h5 className="text-2xl font-bold">{data.disease}</h5>
+                <p><strong>Cure:</strong> {data.cure}</p>
+                <p><strong>Doctor:</strong> {data.doctor}</p>
+                <p><strong>Probability:</strong> {parseFloat(data.probability) * 100} %</p>
+                <p><strong>Risk Level:</strong> {data.risk_level}</p>
+                <Button onClick={() => handleBookAppointment(data)} className="bg-[#7750ed] text-white mt-4">
+                  Book Appointment
+                </Button>
+              </div>
+            ))}
 
           </CardContent>
         </Card>

@@ -1,0 +1,41 @@
+family doctor,urgent care
+family doctor,pulmonologist
+cardiologist
+neurologist 
+oncologist
+endocrinologist
+neurologist
+rheumatologist
+gastroenterologist
+psychiatrist,addiction specialist
+allergist
+hematologist 
+psychologist,psychiatrist
+surgeon 
+allergist,pulmonologist
+neurologist,neurosurgeon
+psychologist,psychiatrist
+urologist
+cardiologist,hematologist
+family doctor,orthopedist
+gynecologist
+pulmonologist
+family doctor,ophthalmologist
+neurologist 
+urologist,gynecologist
+family doctor,gastroenterologist
+doctor,urgent care
+family doctor,urgent care 
+family doctor,dermatologist 
+vascular surgeon
+dermatologist
+ophthalmologist 
+surgeon
+nephrologist 
+hematologist
+gynecologist 
+rheumatologist 
+ophthalmologist
+nephrologist
+gastroenterologist 
+dermatologist

@@ -1,55 +1,68 @@
-import { createBrowserRouter , RouterProvider} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { DashboardComponent } from "./components/dashboard";
 import { PatientAuthComponent } from "./components/patient-auth";
 import { PatientProfileCreationComponent } from "./components/patient-profile-creation";
-import { tokenLoader, checkToken , restrict , logoutFunc } from "./utils/utils";
+import { tokenLoader, checkToken, restrict, logoutFunc } from "./utils/utils";
 import NotFound from "./components/NotFound";
 import { Home } from "./pages/Home";
 import { Loader } from "lucide-react";
-import { AppointmentBookingComponent } from "./components/appointment-booking";
 import CreateHospital from "./pages/CreateHospital";
-
+import { HospitalDoctorSelectionComponent } from "./components/hospital-doctor-selection";
+import { BookingPage } from "./pages/BookingPage";
+import MapComponent from "./pages/Map";
 
 function App() {
   const routerConfig = [
     {
       loader: tokenLoader,
       id: 'root',
-        children: [
+      children: [
         {
           path: "/dashboard",
           loader: checkToken,
           element: <DashboardComponent />
         },
         {
-          path:"/Details",
-          loader : checkToken,
-          element : <PatientProfileCreationComponent />
+          path: "/Details",
+          loader: checkToken,
+          element: <PatientProfileCreationComponent />
         },
         {
-          path : "/Booking",
-          loader : checkToken,
-          element : <AppointmentBookingComponent />
+          path: "/Booking",
+          loader: checkToken,
+          element: <BookingPage />
         },
         {
-          path :"logout",
-          loader : logoutFunc 
+          path: "/demo",
+          loader: checkToken,
+          element: <HospitalDoctorSelectionComponent />
         },
         {
-          path:"createPage",
-          loader : checkToken,
-          element : <CreateHospital />
-        }
+          path: "logout",
+          loader: logoutFunc
+        },
+        {
+          path: "createPage",
+          loader: checkToken,
+          element: <CreateHospital />
+        }, {
+          path: "map",
+          element: <MapComponent />
+        },
       ]
     },
     {
       path: "login",
-      loader:restrict ,   
+      loader: restrict,
       element: <PatientAuthComponent />
     },
     {
-      path :"/",
-      element : <Home />
+      path: "/",
+      element: <Home />
+    },
+    {
+      path: "/map",
+      element: <MapComponent />
     },
     {
       path: "*",
@@ -61,8 +74,8 @@ function App() {
 
   return (
     <>
-    
-    <RouterProvider router={router} />
+
+      <RouterProvider router={router} />
 
     </>
   );
