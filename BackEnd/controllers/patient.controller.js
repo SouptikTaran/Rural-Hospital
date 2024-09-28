@@ -1,4 +1,3 @@
-const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const {
@@ -6,7 +5,9 @@ const {
     signupSchema,
     deletePatientSchema,
 } = require('../schemas/patient.schema.js');
+const fetch = (...args) => import('node-fetch').then(module => module.default(...args));
 
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
@@ -171,10 +172,47 @@ const patientDetails = async (req, res) => {
     }
 };
 
+const predict = async (req, res) => {
+    const { symptoms } = req.body;
+    
+    // Convert symptoms string to a single string, not an array
+    const symptomsString = symptoms
+        .split(',')
+        .map(symptom => symptom.trim())
+        .filter(symptom => symptom !== '')
+        .join(', '); // Join back into a single string
+
+    try {
+        const response = await fetch('http://127.0.0.1:5000/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ symptoms: symptomsString }), // Send as a single string
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        // Send the response back to the original request
+        res.json(data);
+    } catch (error) {
+        console.error('Error calling predict endpoint:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
+
 // Exporting the controllers
 module.exports = {
     signup,
     login,
     deletePatient,
     patientDetails,
-};
+    predict
+}

@@ -5,6 +5,9 @@ import { PatientProfileCreationComponent } from "./components/patient-profile-cr
 import { tokenLoader, checkToken , restrict , logoutFunc } from "./utils/utils";
 import NotFound from "./components/NotFound";
 import { Home } from "./pages/Home";
+import { Loader } from "lucide-react";
+import { AppointmentBookingComponent } from "./components/appointment-booking";
+import CreateHospital from "./pages/CreateHospital";
 
 
 function App() {
@@ -24,8 +27,18 @@ function App() {
           element : <PatientProfileCreationComponent />
         },
         {
+          path : "/Booking",
+          loader : checkToken,
+          element : <AppointmentBookingComponent />
+        },
+        {
           path :"logout",
           loader : logoutFunc 
+        },
+        {
+          path:"createPage",
+          loader : checkToken,
+          element : <CreateHospital />
         }
       ]
     },
