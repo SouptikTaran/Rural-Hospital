@@ -5,6 +5,7 @@ import { HospitalCard } from '@/components/custom/HospitalCard';
 import { DoctorCard } from '@/components/custom/DoctorCard'; // Import your DoctorCard component
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
+import { InfinitySpin } from 'react-loader-spinner'; // Ensure you have this installed
 
 export function BookingPage() {
     const location = useLocation();
@@ -50,7 +51,16 @@ export function BookingPage() {
     }
 
     if (loading) {
-        return <p>Loading...</p>;
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <InfinitySpin
+                    visible={true}
+                    width="200"
+                    color="#4fa94d"
+                    ariaLabel="infinity-spin-loading"
+                />
+            </div> // Centered Loader
+        );
     }
 
     if (error) {
@@ -101,4 +111,4 @@ export function BookingPage() {
             </CardContent>
         </Card>
     );
-}           
+}
