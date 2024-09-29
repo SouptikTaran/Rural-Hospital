@@ -50,6 +50,8 @@ export function BookingPage() {
         return <p>No data available. Please go back and select a diagnosis.</p>;
     }
 
+
+
     if (loading) {
         return (
             <div className="flex items-center justify-center h-screen">

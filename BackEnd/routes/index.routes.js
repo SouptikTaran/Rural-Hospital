@@ -2,6 +2,7 @@ const router = require('express').Router()
 const patientController = require("../controllers/patient.controller")
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const haversine = require('haversine-distance');
 
 router.post('/login', patientController.login)
 router.post('/signup', patientController.signup)
@@ -69,6 +70,53 @@ router.post("/getdata", async (req, res) => {
 });
 
 
+
+router.post('/gethospitals', async (req, res) => {
+    try {
+        const { latitude, longitude } = req.body;
+
+        // Fetch all hospitals from the database with required fields
+        const hospitals = await prisma.hospital.findMany({
+            select: {
+                id: true,
+                name: true,
+                location: true,
+                latitude: true,
+                longitude: true,
+            },
+        });
+
+        const userLocation = { latitude, longitude };
+
+        // Calculate distances for each hospital
+        const hospitalsWithDistance = hospitals.map((hospital) => {
+            const hospitalLocation = {
+                latitude: hospital.latitude,
+                longitude: hospital.longitude,
+            };
+
+            // Calculate distance in meters
+            const distanceInMeters = haversine(userLocation, hospitalLocation);
+
+            // Convert distance to kilometers
+            const distanceInKilometers = distanceInMeters / 1000;
+
+            // Return hospital details along with distance in kilometers
+            return { ...hospital, distanceInKilometers };
+        });
+
+        // Optionally filter hospitals within a specific range (e.g., 50 km)
+        const nearbyHospitals = hospitalsWithDistance
+            .filter((hospital) => hospital.distanceInKilometers <= 1000) // 50 km
+            .sort((a, b) => a.distanceInKilometers - b.distanceInKilometers); // Sort by nearest
+
+        // Send response with nearby hospitals
+        res.json({ hospitals: nearbyHospitals });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to retrieve hospitals' });
+    }
+});
 
 
 module.exports = router

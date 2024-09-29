@@ -30,12 +30,14 @@ export function DashboardComponent() {
   const [symptoms, setSymptoms] = useState("")
   const [result, setResult] = useState([]);
   const { location, setLocation } = useLocation(); // Use context to get location and setLocation
+  const [hospitals, setHospitals] = useState([])
 
   useEffect(() => {
     const fetchLocation = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
+            console.log("Geolocation success:", position); // Debugging
             setLocation({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
@@ -51,7 +53,26 @@ export function DashboardComponent() {
     };
 
     fetchLocation();
-  }, [setLocation]);
+  }, []);
+
+  useEffect(() => {
+    const fetchHospitals = async () => {
+      try {
+        if (location) {  // Only fetch if location is available
+          const response = await axios.post("http://localhost:8000/gethospitals", {
+            latitude: location.latitude,
+            longitude: location.longitude,
+          });
+          setHospitals(response.data.hospitals);
+        }
+      } catch (error) {
+        console.error("Error fetching hospitals:", error);
+      }
+    };
+
+    fetchHospitals();
+  }, [location]);
+
 
 
   const navigate = useNavigate()
@@ -151,11 +172,11 @@ export function DashboardComponent() {
               <Button className="bg-[#5046e3]" type="submit">Analyze Symptoms</Button>
             </form>
             {/* {diagnosis && (
-              <div className="mt-4 rounded-lg bg-blue-100 p-4 text-blue-800">
-                <h3 className="font-semibold">AI Diagnosis:</h3>
-                <p>{diagnosis}</p>
-              </div>
-            )} */}
+                <div className="mt-4 rounded-lg bg-blue-100 p-4 text-blue-800">
+                  <h3 className="font-semibold">AI Diagnosis:</h3>
+                  <p>{diagnosis}</p>
+                </div>
+              )} */}
             {result && result.map((data: Data) => (
               <div key={data.id} className="p-6 bg-white border rounded-lg shadow mb-4">
                 <h5 className="text-2xl font-bold">{data.disease}</h5>
@@ -173,25 +194,30 @@ export function DashboardComponent() {
         </Card>
 
         {/* Nearest Hospitals */}
+        {/* Nearest Hospitals */}
         <Card>
           <CardHeader>
             <CardTitle className="text-[#44457d]">Nearest Hospitals</CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-4">
-              {["City Hospital", "Rural Health Center", "Community Clinic"].map((hospital) => (
-                <li key={hospital} className="rounded-lg border p-4">
-                  <h3 className="font-semibold text-[#7750ed]">{hospital}</h3>
-                  <p className="text-sm text-gray-500">5 km away • 15 min travel time</p>
-                  <p className="mt-2 text-sm text-[#44457d]">Available treatments: General Medicine, Pediatrics</p>
-                  <Button className="mt-2 bg-[#5046e3]" size="sm">
-                    Book Appointment
-                  </Button>
-                </li>
-              ))}
+              {hospitals.length > 0 ? (
+                hospitals.map((hospitalData: any, index) => (
+                  <li key={index} className="rounded-lg border p-4">
+                    <h3 className="font-semibold text-[#7750ed]">{hospitalData.name}</h3>
+                    <p className="text-sm text-gray-500">{hospitalData.distanceInKilometers.toFixed(2)} km away</p>
+                    <Button className="mt-2 bg-[#5046e3]" size="sm">
+                      Book Appointment
+                    </Button>
+                  </li>
+                ))
+              ) : (
+                <p>No hospitals found in your area.</p>
+              )}
             </ul>
           </CardContent>
         </Card>
+
 
         {/* Health Profile & History */}
         <Card>
