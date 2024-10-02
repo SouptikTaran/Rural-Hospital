@@ -45,8 +45,9 @@ router.post('/hospitals', async (req, res) => {
 
 
 
+
 router.post("/getdata", async (req, res) => {
-    const { specialization } = req.body;
+    const { specialization, location } = req.body; // Expect location to be { latitude, longitude }
 
     try {
         const doctors = await prisma.doctor.findMany({
@@ -62,7 +63,34 @@ router.post("/getdata", async (req, res) => {
             },
         });
 
-        res.status(200).json(doctors);
+        // Calculate distance for each hospital and append it to the hospital object
+        const doctorsWithDistance = doctors.map(doctor => {
+            if (doctor.department && doctor.department.hospital) {
+                const { latitude, longitude } = doctor.department.hospital; // Ensure latitude and longitude are present in the hospital data
+
+                // Create points for haversine distance calculation
+                const pointA = { latitude: location.latitude, longitude: location.longitude };
+                const pointB = { latitude: latitude, longitude: longitude };
+                console.log(pointA ,pointB)
+
+                // Calculate distance using haversine
+                const distance = haversine(pointA, pointB); // Distance in meters
+
+                return {
+                    ...doctor,
+                    department: {
+                        ...doctor.department,
+                        hospital: {
+                            ...doctor.department.hospital,
+                            distance: distance / 1000 // Convert to kilometers
+                        }
+                    }
+                };
+            }
+            return doctor; // Return doctor as is if hospital data is missing
+        });
+
+        res.status(200).json(doctorsWithDistance); // Return doctors with distances
     } catch (error) {
         console.error("Error fetching doctors and hospitals:", error);
         res.status(500).json({ error: "Something went wrong" });
@@ -100,6 +128,7 @@ router.post('/gethospitals', async (req, res) => {
 
             // Convert distance to kilometers
             const distanceInKilometers = distanceInMeters / 1000;
+            console.log(distanceInKilometers)
 
             // Return hospital details along with distance in kilometers
             return { ...hospital, distanceInKilometers };

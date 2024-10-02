@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { HospitalCard } from '@/components/custom/HospitalCard';
-import { DoctorCard } from '@/components/custom/DoctorCard'; // Import your DoctorCard component
+import { DoctorCard } from '@/components/custom/DoctorCard';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
-import { InfinitySpin } from 'react-loader-spinner'; // Ensure you have this installed
+import { InfinitySpin } from 'react-loader-spinner';
 
 export function BookingPage() {
     const location = useLocation();
@@ -15,16 +15,45 @@ export function BookingPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedHospital, setSelectedHospital] = useState(null); // State for selected hospital
+    const [userLocation, setUserLocation] = useState({ latitude: null, longitude: null }); // State for user location
 
+    // Fetch user location
     useEffect(() => {
-        if (selectedData) {
-            const specializations = selectedData.doctor.split(',');
-            const lastSpecialization = specializations[specializations.length - 1].trim();
+        const fetchLocation = () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        console.log("Geolocation success:", position);
+                        setUserLocation({
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                        });
+                    },
+                    (error) => {
+                        console.error("Error fetching location:", error.message);
+                        setLoading(false); // Stop loading if there's an error
+                    }
+                );
+            } else {
+                console.error("Geolocation is not supported by this browser.");
+                setLoading(false); // Stop loading if geolocation is not supported
+            }
+        };
 
-            const fetchDoctors = async () => {
+        fetchLocation();
+    }, []);
+
+    // Fetch doctors and hospitals based on user location and selected data
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            if (userLocation.latitude && userLocation.longitude && selectedData) {
+                const specializations = selectedData.doctor.split(',');
+                const lastSpecialization = specializations[specializations.length - 1].trim();
+
                 try {
                     const response = await axios.post("http://localhost:8000/getdata", {
-                        specialization: lastSpecialization
+                        specialization: lastSpecialization,
+                        location: userLocation, // Pass user location to the server
                     });
                     setDoctors(response.data);
                     // Extract unique hospitals from the fetched doctors
@@ -32,25 +61,22 @@ export function BookingPage() {
                         .filter((hospital, index, self) =>
                             index === self.findIndex((h) => h.id === hospital.id)
                         );
+                        console.log(uniqueHospitals)
                     setHospitals(uniqueHospitals); // Set unique hospitals
                 } catch (error) {
                     setError("Failed to load doctors and hospitals");
                 } finally {
                     setLoading(false);
                 }
-            };
+            }
+        };
 
-            fetchDoctors();
-        } else {
-            setLoading(false);
-        }
-    }, [selectedData]);
+        fetchDoctors();
+    }, [userLocation, selectedData]); // Trigger when userLocation and selectedData are updated
 
     if (!selectedData) {
         return <p>No data available. Please go back and select a diagnosis.</p>;
     }
-
-
 
     if (loading) {
         return (
@@ -61,7 +87,7 @@ export function BookingPage() {
                     color="#4fa94d"
                     ariaLabel="infinity-spin-loading"
                 />
-            </div> // Centered Loader
+            </div>
         );
     }
 
@@ -89,6 +115,7 @@ export function BookingPage() {
                                     <HospitalCard
                                         key={hospital.id}
                                         hospital={hospital}
+                                        distance={hospital.distance}
                                         onSelect={() => setSelectedHospital(hospital)} // Set the selected hospital
                                     />
                                 ))}
@@ -100,8 +127,8 @@ export function BookingPage() {
                 ) : ( // When a hospital is selected
                     <>
                         <h3 className="mt-4 mb-2 text-lg font-semibold">Doctors at {selectedHospital.name}:</h3>
-                        <Button onClick={() => setSelectedHospital(null)}>Back to Hospitals</Button> {/* Button to go back */}
-                        <div className="space-y-4 ">
+                        <Button onClick={() => setSelectedHospital(null)}>Back to Hospitals</Button>
+                        <div className="space-y-4">
                             {doctors
                                 .filter(doctor => doctor.department.hospital.id === selectedHospital.id)
                                 .map(doctor => (

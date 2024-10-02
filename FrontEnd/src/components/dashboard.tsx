@@ -164,6 +164,7 @@ export function DashboardComponent() {
                   placeholder="Enter your symptoms..."
                   value={symptoms}
                   onChange={(e) => setSymptoms(e.target.value)}
+                  required
                 />
                 <Button type="button" variant="outline" size="icon">
                   <Mic className="h-4 w-4 text-[#44457d]" />

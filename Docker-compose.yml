@@ -1,0 +1,31 @@
+version: "2.28"
+
+services:
+  backend:
+    container_name: Backend-container
+    restart: unless-stopped
+    image: my-backend-image:1.0.0
+    ports:
+      - "8000:8000"
+    build:
+      context: Backend
+      dockerfile: Dockerfile
+    networks: 
+      - shared-network
+
+  Frontend:
+    container_name: frontend-container
+    restart: unless-stopped
+    image: my-frontend-image:1.0.0
+    build:
+      context: FrontEnd
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks: 
+      - shared-network
+    depends_on:
+      - backend
+
+networks:
+  shared-network:

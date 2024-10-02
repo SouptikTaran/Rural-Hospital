@@ -11,13 +11,14 @@ interface HospitalCardProps {
         location: string;
         latitude: number;
         longitude: number;
+        distance: string; // Accept distance as a prop
     };
     onSelect: () => void;
 }
 
 export const HospitalCard: React.FC<HospitalCardProps> = ({ hospital, onSelect }) => {
     return (
-        <Card className="max-w-md mx-auto hover:shadow-lg transition-shadow duration-300"> {/* Adjusted width */}
+        <Card className="max-w-md mx-auto hover:shadow-lg transition-shadow duration-300">
             <CardHeader>
                 <div className="w-full h-48">
                     <MapContainer center={[hospital.latitude, hospital.longitude]} zoom={13} style={{ height: '100%', width: '100%' }}>
@@ -33,6 +34,9 @@ export const HospitalCard: React.FC<HospitalCardProps> = ({ hospital, onSelect }
                 <CardDescription className="mt-2">
                     <div className="flex items-center">
                         <span>{hospital.location}</span>
+                    </div>
+                    <div className="mt-1">
+                        <strong>Distance: </strong> {hospital.distance.toFixed(2)} km
                     </div>
                 </CardDescription>
             </CardContent>
