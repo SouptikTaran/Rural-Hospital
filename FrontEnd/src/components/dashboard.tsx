@@ -4,6 +4,7 @@ import { LogOutButton } from "./logout"
 import { Bell, ChevronDown, Mic, Phone, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { symptomOptions } from '../utils/data/symptoms'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { toast } from 'react-toastify';
@@ -27,11 +28,19 @@ interface Data {
   risk_level: string; // Risk level (e.g., Low, Medium, High)
 }
 export function DashboardComponent() {
-  const [symptoms, setSymptoms] = useState("")
+  // const [symptoms, setSymptoms] = useState("")
   const [result, setResult] = useState([]);
   const { location, setLocation } = useLocation(); // Use context to get location and setLocation
-  const [hospitals, setHospitals] = useState([])
+  const [hospitals, setHospitals] = useState([]);
+  const [symptomsArray, setSymptomsArray] = useState([...symptomOptions]);
+  const [selectedSymptoms, setSelectedSymptoms] = useState([]);
 
+  const handleSelectSymptoms = (e) => {
+    const selectedValue = e.target.value;
+
+    setSymptomsArray(symptomsArray.filter(item => item !== selectedValue));
+    setSelectedSymptoms([...selectedSymptoms, selectedValue]);
+  }
   useEffect(() => {
     const fetchLocation = () => {
       if (navigator.geolocation) {
@@ -81,7 +90,8 @@ export function DashboardComponent() {
     try {
       const response = await toast.promise(
         axios.post("http://localhost:8000/predict", {
-          symptoms,
+          // symptoms,
+          selectedSymptoms,
           location // Include location if needed
         }),
         {
@@ -158,14 +168,32 @@ export function DashboardComponent() {
             <CardTitle className="text-[#44457d]">Symptom Input & Diagnosis</CardTitle>
           </CardHeader>
           <CardContent >
-            <form onSubmit={handleSymptomSubmit} className="space-y-4">
+            <form onSubmit={handleSymptomSubmit} className="space-y-4" >
               <div className="flex space-x-2">
-                <Input
-                  placeholder="Enter your symptoms..."
-                  value={symptoms}
-                  onChange={(e) => setSymptoms(e.target.value)}
-                  required
-                />
+                    <div className="flex flex-col gap-[10px] w-full ">
+                              <select className="w-[100%] h-9 border rounded-md"
+                            // placeholder="Enter your symptoms..."
+                            // type="string"
+                            // value={symptomsArray}
+
+                            // onChange={(e) => setSymptoms(e.target.value)}
+                            onChange={handleSelectSymptoms}
+                            required
+                          >
+                                <option value="" disabled selected hidden>Please select a symptom</option>
+                                {symptomsArray.map((item,index)=> (
+                                  <option key={index} value={item.value}>{item.label}</option>
+                                ))}
+                            
+                          </select>
+                          <div className="flex flex-wrap gap-6">
+                          {selectedSymptoms.map(item => (
+                            <div className="rounded-full bg-[#5046e3] px-5 text-white" key={item}>{item}</div>
+                          ))}
+                          </div>
+                    </div>
+
+
                 <Button type="button" variant="outline" size="icon">
                   <Mic className="h-4 w-4 text-[#44457d]" />
                 </Button>

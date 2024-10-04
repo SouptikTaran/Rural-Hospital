@@ -5,7 +5,7 @@ import { PatientProfileCreationComponent } from "./components/patient-profile-cr
 import { tokenLoader, checkToken, restrict, logoutFunc } from "./utils/utils";
 import NotFound from "./components/NotFound";
 import { Home } from "./pages/Home";
-import { Loader } from "lucide-react";
+// import { Loader } from "lucide-react";
 import CreateHospital from "./pages/CreateHospital";
 import { HospitalDoctorSelectionComponent } from "./components/hospital-doctor-selection";
 import { BookingPage } from "./pages/BookingPage";

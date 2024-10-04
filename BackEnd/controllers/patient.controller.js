@@ -173,17 +173,18 @@ const patientDetails = async (req, res) => {
 };
 
 const predict = async (req, res) => {
-    const { symptoms } = req.body;
-    
+    const { selectedSymptoms } = req.body;
+    console.log(selectedSymptoms)
     // Convert symptoms string to a single string, not an array
-    const symptomsString = symptoms
-        .split(',')
+    const symptomsString = selectedSymptoms
+        // .split(',')
         .map(symptom => symptom.trim())
         .filter(symptom => symptom !== '')
         .join(', '); // Join back into a single string
 
     try {
-        const response = await fetch('http://python-ml:5000/predict', {
+        // const response = await fetch('http://python-ml:5000/predict', {
+        const response = await fetch('http://localhost:5000/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
