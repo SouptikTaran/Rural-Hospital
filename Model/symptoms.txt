@@ -1,0 +1,79 @@
+fever,cough,sore throat,runny or stuffy nose,muscle aches,headache,fatigue
+cough,mucus production,shortness of breath,chest pain
+fever,cough,shortness of breath,chest pain,fatigue
+chest pain,shortness of breath,nausea,vomiting,lightheadedness,sweating
+sudden weakness,numbness on one side of the body,confusion,difficulty speaking,trouble seeing in one eye,severe headache
+lump,unexplained weight loss,fatigue,changes in bowel,bladder habits,persistent cough,indigestion,unexplained bleeding or discharge
+increased thirst,frequent urination,unexplained weight loss,fatigue,blurred vision,cuts that are slow to heal
+memory loss,confusion,difficulty thinking,changes in personality or behavior
+pain,stiffness,swelling,inflammation in the joints
+fever,sore throat,cough,conjunctivitis,rash,pink eye
+vomiting,diarrhea,jaundice,liver damage,death
+physical dependence on alcohol,tolerance to alcohol,withdrawal symptoms,impaired judgment,memory problems,liver damage,heart disease,cancer
+runny nose,sneezing,itchy eyes,itchy nose,throat,palate
+fatigue,shortness of breath,pale skin,lightheadedness,dizziness
+excessive worry,fear,anxiety that interfere with daily life
+pain in the lower right abdomen,nausea,vomiting,fever
+difficulty with social interaction,repetitive behaviors,restricted interests
+wheezing,shortness of breath,coughing,chest tightness
+fever,headache,stiff neck,nausea,vomiting,sensitivity to light
+extreme mood swings,from manito depression
+blood in the urine,pain or burning when urinating,frequent urination,urgency to urinate,incontinence
+pain,swelling,redness,warmth,tenderness in the affected area,shortness of breath,chest pain,difficulty breathing,coughing up blood
+pain,swelling,inflammation in bursa,which is small sac of fluid that cushions joints
+abnormal pap test results,abnormal vaginal bleeding,pain during sex
+rash,fever,headache,muscle aches,fatigue
+chronic bronchitis,emphysema
+high levels of cholesterol in the blood
+runny nose,sneezing,sore throat,cough,congestion
+red,itchy,watery eyes
+sadness,hopelessness,loss of interest in activities,changes in appetite,sleep,energy levels
+loose,watery stools
+disturbance in eating behavior that can lead to serious health problems
+seizures
+elevated body temperature 
+nausea,vomiting,diarrhea,abdominal cramps
+pain in the upper right abdomen,nausea,vomiting,fever
+sexually transmitted infection that can cause burning during urination,discharge from the penis or vagina,pain in the lower abdomen
+chest pain,shortness of breath,fatigue,dizziness,fainting
+inflammation of the liver
+sexually transmitted infection that can cause blisters on the genitals,mouth,other parts of the body
+abdominal pain,bloating,constipation,diarrhea
+pain in the lower back or side,nausea,vomiting,blood in the urine
+cough that does not go away,shortness of breath,chest pain,unexplained weight loss,fatigue,blood in the sputum
+fever,chills,sweating,headache,muscle aches,fatigue,vomiting,diarrhea
+fever,cough,runny nose,red eyes,sore throat,rash
+fever,sore throat,fatigue,swollen lymph nodes,rash
+fever,headache,muscle aches,tingling at the bite site,difficulty swallowing,hydrophobia,aerophobia
+fever,diarrhea,abdominal cramps,nausea,vomiting
+painful rash that follows nerve path
+cough that does not go away,fever,night sweats,weight loss,fatigue,chest pain
+painful urination,burning,frequent urination,urgency to urinate,blood in the urine
+swollen,twisted veins,usually in the legs
+raised,rough growths on the skin
+itching,burning,discharge from the vaginor penis
+pain,redness,inflammation in the eye
+decreased kidney function
+bulge in the wall of the aorta,the largest artery in the body
+change in bowel habits,such as diarrhea,constipation,narrowing of the stool,blood in the stool,abdominal pain,unexplained weight loss
+difficulty getting,keeping an erection 
+widespread pain,fatigue,tenderness
+increased pressure in the eye that can damage the optic nerve,lead to vision loss
+condition in which the heart cannot pump blood as well as it should
+damage to the kidneys that can lead to kidney failure
+condition that affects the lungs,can make it difficult to breathe
+tremors,slow movement,stiffness,difficulty with balance,coordination 
+pain in the upper abdomen,indigestion,nausea,vomiting
+pain,numbness,tingling in the arms or legs
+difficulty urinating,blood in the urine,pain in the back or hips,erectile dysfunction
+pain,swelling,stiffness in the joints
+sudden weakness,numbness on one side of the body,difficulty speaking,confusion,trouble seeing in one eye,severe headache
+pain in the upper abdomen,indigestion,nausea,vomiting,weight loss
+lump in the neck,hoarseness,fatigue,weight loss,unexplained heat intolerance,sensitivity to cold
+diarrhea,bloody stool,abdominal pain,weight loss
+itchy,red,inflamed skin
+diarrhea,bloating,weight loss,fatigue,abdominal pain
+fatigue,shortness of breath,swelling,high blood pressure,changes in urination
+hyperthyroidism,which is an overactive thyroid
+hypothyroidism,which is an underactive thyroid 
+chronic autoimmune disease that can affect any part of the body
