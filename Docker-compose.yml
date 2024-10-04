@@ -13,15 +13,14 @@ services:
     networks: 
       - shared-network
 
-  Frontend:
-    container_name: frontend-container
+  python-ml:
+    container_name: pythonml-container
     restart: unless-stopped
-    image: my-frontend-image:1.0.0
     build:
-      context: FrontEnd
+      context: Model  # Updated to match your Python model folder
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "5000:5000"  # Updated port to match the one exposed in your Dockerfile
     networks: 
       - shared-network
     depends_on:
