@@ -8,7 +8,19 @@ services:
     ports:
       - "8000:8000"
     build:
-      context: Backend
+      context: BackEnd
+      dockerfile: Dockerfile
+    networks: 
+      - shared-network
+
+  frontend:
+    container_name: frontend-container
+    restart: unless-stopped
+    image: rural-frontend-image:1.0.0
+    ports:
+      - "3000:3000"
+    build:
+      context: FrontEnd
       dockerfile: Dockerfile
     networks: 
       - shared-network
