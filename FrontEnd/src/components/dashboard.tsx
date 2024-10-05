@@ -175,7 +175,7 @@ const handleSelectSymptoms = (e: React.ChangeEvent<HTMLSelectElement>) => {
                               <select className="w-[100%] h-9 border rounded-md"
                             // placeholder="Enter your symptoms..."
                             // type="string"
-                            // value={symptomsArray}
+                              value=""
 
                             // onChange={(e) => setSymptoms(e.target.value)}
                             onChange={handleSelectSymptoms}
