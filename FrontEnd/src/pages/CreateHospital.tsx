@@ -1,8 +1,30 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import axios from 'axios';
 
+// Define types for Doctor, Department, and Hospital
+interface Doctor {
+  name: string;
+  specialization: string;
+  phoneNumber: string;
+  email: string;
+}
+
+interface Department {
+  name: string;
+  doctors: Doctor[];
+}
+
+interface HospitalData {
+  name: string;
+  location: string;
+  latitude: string;
+  longitude: string;
+  departments: Department[];
+}
+
 const CreateHospital = () => {
-  const [hospitalData, setHospitalData] = useState({
+  const [hospitalData, setHospitalData] = useState<HospitalData>({
     name: '',
     location: '',
     latitude: '',
@@ -22,31 +44,50 @@ const CreateHospital = () => {
     ],
   });
 
-  const handleChange = (e, index, doctorIndex, field, type) => {
+  // Update handleChange function with better type checking
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number | null,
+    doctorIndex: number | null,
+    field: string,
+    type: 'hospital' | 'department' | 'doctor'
+  ) => {
     const value = e.target.value;
     const updatedHospitalData = { ...hospitalData };
-
+  
     if (type === 'hospital') {
-      updatedHospitalData[field] = value;
-    } else if (type === 'department') {
-      updatedHospitalData.departments[index][field] = value;
-    } else if (type === 'doctor') {
-      updatedHospitalData.departments[index].doctors[doctorIndex][field] = value;
+      (updatedHospitalData as any)[field] = value;
+    } else if (type === 'department' && index !== null) {
+      if (field === 'name') {
+        updatedHospitalData.departments[index].name = value;
+      } 
+      // Skip assigning to 'doctors' field directly, handle adding/removing doctors elsewhere
+    } else if (type === 'doctor' && index !== null && doctorIndex !== null) {
+      updatedHospitalData.departments[index].doctors[doctorIndex][field as keyof Doctor] = value;
     }
-
+  
     setHospitalData(updatedHospitalData);
   };
+  
 
   const addDepartment = () => {
     setHospitalData({
       ...hospitalData,
-      departments: [...hospitalData.departments, { name: '', doctors: [{ name: '', specialization: '', phoneNumber: '', email: '' }] }],
+      departments: [
+        ...hospitalData.departments,
+        { name: '', doctors: [{ name: '', specialization: '', phoneNumber: '', email: '' }] },
+      ],
     });
   };
 
-  const addDoctor = (index) => {
+  const addDoctor = (index: number) => {
     const updatedDepartments = [...hospitalData.departments];
-    updatedDepartments[index].doctors.push({ name: '', specialization: '', phoneNumber: '', email: '' });
+    updatedDepartments[index].doctors.push({
+      name: '',
+      specialization: '',
+      phoneNumber: '',
+      email: '',
+    });
 
     setHospitalData({
       ...hospitalData,
@@ -54,7 +95,7 @@ const CreateHospital = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       console.log(hospitalData);

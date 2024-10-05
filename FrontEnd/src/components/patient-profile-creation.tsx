@@ -6,15 +6,15 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
-import toast from "react-hot-toast";
-import Cookies from 'js-cookie';
+import toast, { Renderable, Toast, ValueFunction } from "react-hot-toast";
+
 
 import axios from 'axios';
 import { useNavigate } from "react-router-dom"
 axios.defaults.withCredentials = true;
 
 
-const errorNoti = (msg) => {
+const errorNoti = (msg: Renderable | ValueFunction<Renderable, Toast>) => {
   toast.error(msg, {
     style: {
       border: '1px solid #FF0000',
@@ -51,10 +51,10 @@ const successNoti = (msg: any) => {
 
 export function PatientProfileCreationComponent() {
   const [address, setAddress] = useState("")
-  const [age, setAge] = useState()
+  const [age, setAge] = useState<number | undefined>();
   const [phoneNumber, setPhoneNumber] = useState("")
   const [email, setEmail] = useState("")
-  const [notification, setNotification] = useState({ message: "", type: "" })
+  const [notification] = useState({ message: "", type: "" })
 
   const navigate = useNavigate()
 
@@ -79,9 +79,16 @@ export function PatientProfileCreationComponent() {
 
 
     } catch (error) {
-      console.log(error.response.data.error)
-      errorNoti(error.response.data.error)
-
+      // Type guard to handle AxiosError
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.error || "An error occurred during signup";
+        console.log(errorMessage);
+        errorNoti(errorMessage);
+      } else {
+        // Handle other unexpected errors
+        console.error("Unexpected error:", error);
+        errorNoti("An unexpected error occurred");
+      }
     }
 
 
@@ -123,7 +130,7 @@ export function PatientProfileCreationComponent() {
                   type="number"
                   placeholder="Enter your age"
                   value={age}
-                  onChange={(e) => setAge(e.target.value)}
+                  onChange={(e) => setAge(Number(e.target.value))}
                   required
                   min="0"
                   max="120"
@@ -172,7 +179,7 @@ export function PatientProfileCreationComponent() {
               Terms of Service
             </a>{" "}
             and{" "}
-            <a href="#" className="text-blue-600 hover:underline text-[#6e6da9]">
+            <a href="#" className="hover:underline text-[#6e6da9]">
               Privacy Policy
             </a>
             .

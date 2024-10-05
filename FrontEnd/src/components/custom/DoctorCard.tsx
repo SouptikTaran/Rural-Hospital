@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,18 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CheckCircle } from 'lucide-react'; // Importing Lucide icon
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-
-interface Doctor {
-    id: number;
-    name: string;
-    specialty: string;
-    rating: number;
-    image: string;
-    availableDays: string[];
-    phoneNumber: string;
-    email: string;
-    department: { name: string };
-}
+import { Doctor } from "@/types/types";
 
 const SuccessNotification: React.FC = () => (
     <Card className="flex items-center p-4 mb-4 bg-green-100 border border-green-300 rounded-lg">

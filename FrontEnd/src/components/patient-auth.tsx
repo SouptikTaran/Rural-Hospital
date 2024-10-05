@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react"
 import { Eye, EyeOff, LockKeyhole, Mail, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import toast from "react-hot-toast";
+import toast, { Renderable, Toast, ValueFunction } from "react-hot-toast";
 import Cookies from 'js-cookie';
 
 import axios from 'axios';
@@ -14,7 +15,7 @@ import { useNavigate } from "react-router-dom"
 axios.defaults.withCredentials = true;
 
 
-const errorNoti = (msg) => {
+const errorNoti = (msg: Renderable | ValueFunction<Renderable, Toast>) => {
   toast.error(msg, {
     style: {
       border: '1px solid #FF0000',
@@ -30,7 +31,7 @@ const errorNoti = (msg) => {
   });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const successNoti = (msg: any) => {
   toast.success(msg, {
     style: {
@@ -89,9 +90,11 @@ export function PatientAuthComponent() {
       }
 
 
-    } catch (error) {
-      if (error.response && error.response.data) {
-        errorNoti(error.response.data.error || "Error occurred during Login");
+    }catch (error) {
+      // Check if the error is an AxiosError or a custom error type with a response
+      if (error instanceof Error && (error as any).response) {
+        const responseError = error as any; // Type assertion for AxiosError
+        errorNoti(responseError.response.data.error || "Error occurred during Login");
       } else {
         errorNoti("Error occurred during signup");
       }
@@ -120,7 +123,7 @@ export function PatientAuthComponent() {
           navigate("/details");
         }
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    
     } catch (error: any) {
       if (error.response && error.response.data) {
         errorNoti(error.response.data.error || "Error occurred during signup");

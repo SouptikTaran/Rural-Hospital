@@ -9,7 +9,6 @@ import { Home } from "./pages/Home";
 import CreateHospital from "./pages/CreateHospital";
 import { HospitalDoctorSelectionComponent } from "./components/hospital-doctor-selection";
 import { BookingPage } from "./pages/BookingPage";
-import MapComponent from "./pages/Map";
 
 function App() {
   const routerConfig = [
@@ -45,9 +44,6 @@ function App() {
           path: "createPage",
           loader: checkToken,
           element: <CreateHospital />
-        }, {
-          path: "map",
-          element: <MapComponent />
         },
       ]
     },
@@ -59,10 +55,6 @@ function App() {
     {
       path: "/",
       element: <Home />
-    },
-    {
-      path: "/map",
-      element: <MapComponent />
     },
     {
       path: "*",

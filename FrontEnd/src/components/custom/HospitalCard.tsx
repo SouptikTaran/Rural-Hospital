@@ -11,7 +11,7 @@ interface HospitalCardProps {
         location: string;
         latitude: number;
         longitude: number;
-        distance: string; // Accept distance as a prop
+        distance: number; 
     };
     onSelect: () => void;
 }

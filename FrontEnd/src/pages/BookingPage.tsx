@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { HospitalCard } from '@/components/custom/HospitalCard';
@@ -6,16 +6,27 @@ import { DoctorCard } from '@/components/custom/DoctorCard';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { InfinitySpin } from 'react-loader-spinner';
+import { Doctor , Hospital } from '@/types/types';
+
+interface SelectedData {
+    disease: string;
+    doctor: string; // Comma-separated string of specializations
+}
+
+interface UserLocation {
+    latitude: number;
+    longitude: number;
+}
 
 export function BookingPage() {
     const location = useLocation();
-    const { selectedData } = location.state || {}; // Retrieve the passed data
-    const [doctors, setDoctors] = useState([]);
-    const [hospitals, setHospitals] = useState([]); // State for hospitals
+    const { selectedData } = location.state as { selectedData: SelectedData } || {}; // Retrieve the passed data
+    const [doctors, setDoctors] = useState<Doctor[]>([]);
+    const [hospitals, setHospitals] = useState<Hospital[]>([]); // State for hospitals
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [selectedHospital, setSelectedHospital] = useState(null); // State for selected hospital
-    const [userLocation, setUserLocation] = useState({ latitude: null, longitude: null }); // State for user location
+    const [error, setError] = useState<string | null>(null);
+    const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null); // State for selected hospital
+    const [userLocation, setUserLocation] = useState<UserLocation | null>(null); // State for user location
 
     // Fetch user location
     useEffect(() => {
@@ -46,12 +57,12 @@ export function BookingPage() {
     // Fetch doctors and hospitals based on user location and selected data
     useEffect(() => {
         const fetchDoctors = async () => {
-            if (userLocation.latitude && userLocation.longitude && selectedData) {
+            if (userLocation && selectedData) {
                 const specializations = selectedData.doctor.split(',');
                 const lastSpecialization = specializations[specializations.length - 1].trim();
 
                 try {
-                    const response = await axios.post("http://localhost:8000/getdata", {
+                    const response = await axios.post<Doctor[]>("http://localhost:8000/getdata", {
                         specialization: lastSpecialization,
                         location: userLocation, // Pass user location to the server
                     });
@@ -61,10 +72,14 @@ export function BookingPage() {
                         .filter((hospital, index, self) =>
                             index === self.findIndex((h) => h.id === hospital.id)
                         );
-                        console.log(uniqueHospitals)
+                    console.log(uniqueHospitals);
                     setHospitals(uniqueHospitals); // Set unique hospitals
                 } catch (error) {
-                    setError("Failed to load doctors and hospitals");
+                    if (axios.isAxiosError(error)) {
+                        setError("Failed to load doctors and hospitals");
+                    } else {
+                        setError("An unexpected error occurred");
+                    }
                 } finally {
                     setLoading(false);
                 }
@@ -82,10 +97,8 @@ export function BookingPage() {
         return (
             <div className="flex items-center justify-center h-screen">
                 <InfinitySpin
-                    visible={true}
                     width="200"
                     color="#4fa94d"
-                    ariaLabel="infinity-spin-loading"
                 />
             </div>
         );
@@ -115,7 +128,6 @@ export function BookingPage() {
                                     <HospitalCard
                                         key={hospital.id}
                                         hospital={hospital}
-                                        distance={hospital.distance}
                                         onSelect={() => setSelectedHospital(hospital)} // Set the selected hospital
                                     />
                                 ))}
@@ -129,11 +141,9 @@ export function BookingPage() {
                         <h3 className="mt-4 mb-2 text-lg font-semibold">Doctors at {selectedHospital.name}:</h3>
                         <Button onClick={() => setSelectedHospital(null)}>Back to Hospitals</Button>
                         <div className="space-y-4">
-                            {doctors
-                                .filter(doctor => doctor.department.hospital.id === selectedHospital.id)
-                                .map(doctor => (
-                                    <DoctorCard key={doctor.name} doctor={doctor} />
-                                ))}
+                            {filteredDoctors.map(doctor => (
+                                <DoctorCard key={doctor.name} doctor={doctor} />
+                            ))}
                         </div>
                     </>
                 )}

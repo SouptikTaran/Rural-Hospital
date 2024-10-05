@@ -1,6 +1,5 @@
 import '../assets/styles/style.css';
 import Logo from '../assets/images/Logo.png';
-import React from 'react';
 
 export const Home = () => {
     return (
