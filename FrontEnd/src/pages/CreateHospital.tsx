@@ -99,7 +99,7 @@ const CreateHospital = () => {
     e.preventDefault();
     try {
       console.log(hospitalData);
-      const response = await axios.post('http://localhost:8000/hospitals', hospitalData);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_API}/hospitals`, hospitalData);
       console.log('Hospital created:', response.data);
     } catch (error) {
       console.error('Error creating hospital:', error);

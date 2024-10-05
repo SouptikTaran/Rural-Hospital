@@ -63,7 +63,7 @@ export function PatientProfileCreationComponent() {
     // TODO: Implement profile creation logic
     console.log("Profile Creation:", { address, age, phoneNumber, email })
     try {
-      const response = await axios.post('http://localhost:8000/update', {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_API}/update`, {
         address, age, phoneNumber, email
       })
 

@@ -62,7 +62,7 @@ export function BookingPage() {
                 const lastSpecialization = specializations[specializations.length - 1].trim();
 
                 try {
-                    const response = await axios.post<Doctor[]>("http://localhost:8000/getdata", {
+                    const response = await axios.post<Doctor[]>(`${import.meta.env.VITE_BACKEND_API}/getdata`, {
                         specialization: lastSpecialization,
                         location: userLocation, // Pass user location to the server
                     });

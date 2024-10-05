@@ -70,7 +70,7 @@ const handleSelectSymptoms = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const fetchHospitals = async () => {
       try {
         if (location) {  // 
-          const response = await axios.post("http://localhost:8000/gethospitals", {
+          const response = await axios.post(`${import.meta.env.VITE_BACKEND_API}/gethospitals`, {
             latitude: location.latitude,
             longitude: location.longitude,
           });
@@ -91,7 +91,7 @@ const handleSelectSymptoms = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
     try {
       const response = await toast.promise(
-        axios.post("http://localhost:8000/predict", {
+        axios.post(`${import.meta.env.VITE_BACKEND_API}/predict`, {
           // symptoms,
           selectedSymptoms,
           location // Include location if needed

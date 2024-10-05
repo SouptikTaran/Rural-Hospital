@@ -67,7 +67,7 @@ export function PatientAuthComponent() {
     // console.log("Login:", { email: loginEmail, password: loginPassword })
 
     try {
-      const response = await axios.post("http://localhost:8000/login", {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_API}/login`, {
         email: loginEmail,
         password: loginPassword,
       })
@@ -104,7 +104,7 @@ export function PatientAuthComponent() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/signup", {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_API}/signup`, {
         firstName: signupFirstName,
         lastName: signupLastName,
         email: signupEmail,
