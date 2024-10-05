@@ -13,7 +13,6 @@ router.post('/predict', patientController.predict)
 
 router.post('/hospitals', async (req, res) => {
     const { name, location, latitude, longitude, departments } = req.body;
-    console.log(req.body);
     try {
         const hospital = await prisma.hospital.create({
             data: {
@@ -128,7 +127,6 @@ router.post('/gethospitals', async (req, res) => {
 
             // Convert distance to kilometers
             const distanceInKilometers = distanceInMeters / 1000;
-            console.log(distanceInKilometers)
 
             // Return hospital details along with distance in kilometers
             return { ...hospital, distanceInKilometers };

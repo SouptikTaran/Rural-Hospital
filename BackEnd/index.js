@@ -11,7 +11,7 @@ const routes = require("./routes/index.routes")
 const PORT = process.env?.PORT || 8000
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow requests from frontend origin
+    origin: 'http://localhost:3000', // Allow requests from frontend origin
     credentials: true // Enable credentials (cookies)
   }));
   app.use(helmet());

@@ -112,8 +112,8 @@ const handleSelectSymptoms = (e: React.ChangeEvent<HTMLSelectElement>) => {
         }
       );
       setResult(response.data)
-      console.log(response.data);
-      console.log(location);
+      // console.log(response.data);
+      // console.log(location);
     } catch (error) {
       console.error("Request failed:", error);
     }

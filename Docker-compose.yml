@@ -24,6 +24,8 @@ services:
       dockerfile: Dockerfile
     networks: 
       - shared-network
+    depends_on:
+      - backend
 
   python-ml:
     container_name: pythonml-container
@@ -40,3 +42,4 @@ services:
 
 networks:
   shared-network:
+    driver: bridge

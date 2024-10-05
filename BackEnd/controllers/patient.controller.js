@@ -174,7 +174,7 @@ const patientDetails = async (req, res) => {
 
 const predict = async (req, res) => {
     const { selectedSymptoms } = req.body;
-    console.log(selectedSymptoms)
+    // console.log(selectedSymptoms)
     // Convert symptoms string to a single string, not an array
     const symptomsString = selectedSymptoms
         // .split(',')
