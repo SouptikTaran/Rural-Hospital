@@ -34,16 +34,15 @@ export function DashboardComponent() {
   const [symptomsArray, setSymptomsArray] = useState([...symptomOptions]);
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
 
-  const handleSelectSymptoms = (e: React.ChangeEvent<HTMLSelectElement>) => {
+const handleSelectSymptoms = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
 
     if (!selectedSymptoms.includes(selectedValue)) {
       setSelectedSymptoms([...selectedSymptoms, selectedValue]);
-        setSymptomsArray(symptomsArray.filter(item => item.value !== selectedValue));
-      
-      // Update the available symptoms by removing the selected symptom
+      setSymptomsArray(symptomsArray.filter(item => item.value !== selectedValue));
+        // Update the available symptoms by removing the selected symptom
     }
-  };
+};
   useEffect(() => {
     const fetchLocation = () => {
       if (navigator.geolocation) {
@@ -170,31 +169,44 @@ export function DashboardComponent() {
             <CardTitle className="text-[#44457d]">Symptom Input & Diagnosis</CardTitle>
           </CardHeader>
           <CardContent >
-            <form onSubmit={handleSymptomSubmit} className="space-y-4">
+            <form onSubmit={handleSymptomSubmit} className="space-y-4" >
               <div className="flex space-x-2">
-                <div className="flex flex-col gap-[10px] w-full">
-                  <select
-                    className="w-[100%] h-9 border rounded-md"
-                    onChange={handleSelectSymptoms}
-                    required
-                  >
-                    <option value="" disabled selected hidden>Please select a symptom</option>
-                    {symptomsArray.map((item, index) => (
-                      <option key={index} value={item.value}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="flex flex-wrap gap-6">
-                    {selectedSymptoms.map(item => (
-                      <div className="rounded-full bg-[#5046e3] px-5 text-white" key={item}>
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                    <div className="flex flex-col gap-[10px] w-full ">
+                              <select className="w-[100%] h-9 border rounded-md"
+                            // placeholder="Enter your symptoms..."
+                            // type="string"
+                            // value={symptomsArray}
+
+                            // onChange={(e) => setSymptoms(e.target.value)}
+                            onChange={handleSelectSymptoms}
+                            // required
+                          >
+                                <option value="" disabled selected hidden>Please select a symptom</option>
+                                {symptomsArray.map((item,index)=> (
+                                  <option key={index} value={item.value}>{item.label}</option>
+                                ))}
+                            
+                          </select>
+                          <div className="flex flex-wrap gap-6">
+                          {selectedSymptoms.map(item => (
+                            <div className="rounded-full bg-[#5046e3] px-5 text-white" key={item}>{item}</div>
+                          ))}
+                          </div>
+                    </div>
+
+
+                <Button type="button" variant="outline" size="icon">
+                  <Mic className="h-4 w-4 text-[#44457d]" />
+                </Button>
               </div>
+              <Button className="bg-[#5046e3]" type="submit">Analyze Symptoms</Button>
             </form>
+            {/* {diagnosis && (
+                <div className="mt-4 rounded-lg bg-blue-100 p-4 text-blue-800">
+                  <h3 className="font-semibold">AI Diagnosis:</h3>
+                  <p>{diagnosis}</p>
+                </div>
+              )} */}
             {result && result.map((data: Data) => (
               <div key={data.id} className="p-6 bg-white border rounded-lg shadow mb-4">
                 <h5 className="text-2xl font-bold">{data.disease}</h5>
