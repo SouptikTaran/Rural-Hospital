@@ -41,7 +41,7 @@ def predict(symptoms):
     
     return possible_diseases[:3]
 
-@app.route('/predict', methods=['POST'])
+@app.route('/model/predict', methods=['POST'])
 def get_predictions():
     # Get the JSON data from the request
     data = request.get_json()
