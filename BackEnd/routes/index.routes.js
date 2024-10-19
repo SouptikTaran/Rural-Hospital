@@ -145,5 +145,9 @@ router.post('/gethospitals', async (req, res) => {
     }
 });
 
+router.get('/demo' , (req , res)=>{
+    res.json("Server listening and active");
+})
+
 
 module.exports = router
